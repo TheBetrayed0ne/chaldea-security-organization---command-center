@@ -22,6 +22,7 @@ export const DEPARTMENT_NAV: DepartmentNavMap = {
     link: {
       operations: [
         { label: 'Command Core', route: '/', icon: '⌂' },
+        { label: 'Reactor Control', route: '/reactor', icon: '⚛' },
         { label: 'Sheba Lens', route: '/sheba', icon: '🔭' },
         { label: 'Rayshift Hub', route: '/rayshift', icon: '◬' },
         { label: 'Saint Graph', route: '/saint-graph', icon: '☍' },
@@ -84,6 +85,66 @@ export const DEPARTMENT_NAV: DepartmentNavMap = {
         { label: 'Singularities', route: '/singularities', icon: '🌍' }
       ]
     }
+  },
+  engineering: {
+    link: {
+      operations: [
+        { label: 'Command Core', route: '/', icon: '⌂' },
+        { label: 'Reactor Control', route: '/reactor', icon: '⚛' },
+        { label: 'Sheba Lens', route: '/sheba', icon: '🔭' }
+      ],
+      communications: [
+        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' }
+      ],
+      departmental: [
+        { label: 'Logistics', route: '/logistics', icon: '▤' }
+      ]
+    }
+  },
+  maintenance: {
+    link: {
+      operations: [
+        { label: 'Command Core', route: '/', icon: '⌂' },
+        { label: 'Reactor Control', route: '/reactor', icon: '⚛' },
+        { label: 'Anomalies', route: '/anomalies', icon: '▵' }
+      ],
+      communications: [
+        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' }
+      ],
+      departmental: [
+        { label: 'Logistics', route: '/logistics', icon: '▤' },
+        { label: 'Medical Records', route: '/medical', icon: '✚' }
+      ]
+    }
+  },
+  security: {
+    link: {
+      operations: [
+        { label: 'Command Core', route: '/', icon: '⌂' },
+        { label: 'Sheba Lens', route: '/sheba', icon: '🔭' },
+        { label: 'Anomalies', route: '/anomalies', icon: '▵' }
+      ],
+      communications: [
+        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' }
+      ],
+      departmental: [
+        { label: 'Singularities', route: '/singularities', icon: '🌍' }
+      ]
+    }
+  },
+  janitorial: {
+    link: {
+      operations: [
+        { label: 'Command Core', route: '/', icon: '⌂' }
+      ],
+      communications: [
+        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' },
+        { label: 'Hearthspace', route: '/hearthspace', icon: '🏠' }
+      ],
+      departmental: [
+        { label: 'Logistics', route: '/logistics', icon: '▤' }
+      ]
+    }
   }
 };
 
@@ -91,6 +152,7 @@ export const DEPARTMENT_NAV: DepartmentNavMap = {
 export const DEFAULT_NAV: DepartmentNavConfig = {
   operations: [
     { label: 'Command Core', route: '/', icon: '⌂' },
+    { label: 'Reactor Control', route: '/reactor', icon: '⚛' },
     { label: 'Sheba Lens', route: '/sheba', icon: '🔭' },
     { label: 'Rayshift Hub', route: '/rayshift', icon: '◬' },
     { label: 'Saint Graph', route: '/saint-graph', icon: '☍' },

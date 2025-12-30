@@ -6,18 +6,23 @@ import { getRoleTheme } from './theme/getRoleTheme.ts';
 import { AuthScreen } from './screens/AuthScreen.tsx';
 import { RoleSelectScreen } from './screens/RoleSelectScreen.tsx';
 import { StaffMemberSelectScreen } from './screens/StaffMemberSelectScreen.tsx';
+import { CommandCoreSelectScreen } from './screens/CommandCoreSelectScreen.tsx';
+import { useGlobalStatus } from '../../context/StatusContext.tsx';
 
 interface WelcomeScreenProps {
   onLogin: (role: UserRole, staffMember?: { id: string; name: string; permissions: string[] }) => void;
 }
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onLogin }) => {
+  const { status } = useGlobalStatus();
   const [statusLogs, setStatusLogs] = useState<string[]>([]);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [showRoleSelect, setShowRoleSelect] = useState(false);
   const [showStaffMemberSelect, setShowStaffMemberSelect] = useState(false);
+  const [showCommandCoreSelect, setShowCommandCoreSelect] = useState(false);
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
   const [selectedStaffMember, setSelectedStaffMember] = useState<string | null>(null);
+  const [selectedCommandCoreMember, setSelectedCommandCoreMember] = useState<string | null>(null);
 
   // Theme derived from current role (or null for default)
   const theme = getRoleTheme(selectedRole);
@@ -57,8 +62,14 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onLogin }) => {
         setShowStaffMemberSelect(true);
         soundService.playTransition();
       }, 1000);
+    } else if (role === 'master') {
+      // If master role, show command core selection
+      setTimeout(() => {
+        setShowCommandCoreSelect(true);
+        soundService.playTransition();
+      }, 1000);
     } else {
-      // For master/servant, proceed directly to login
+      // For servant, proceed directly to login
       setTimeout(() => {
         onLogin(role);
       }, 1000);
@@ -75,10 +86,42 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onLogin }) => {
     }, 1000);
   };
 
+  const handleCommandCoreMemberSelection = (memberId: string, memberName: string, permissions: string[]) => {
+    setSelectedCommandCoreMember(memberId);
+    soundService.playSelect();
+
+    // Finalizing Auth Sequence
+    setTimeout(() => {
+      onLogin('master', { id: memberId, name: memberName, permissions });
+    }, 1000);
+  };
+
+  const handleBackToRoleSelect = () => {
+    soundService.playClick();
+    setShowCommandCoreSelect(false);
+    setShowStaffMemberSelect(false);
+    setSelectedRole(null);
+    setSelectedCommandCoreMember(null);
+    setSelectedStaffMember(null);
+  };
+
+  if (showCommandCoreSelect) {
+    return (
+      <CommandCoreSelectScreen
+        onSelect={handleCommandCoreMemberSelection}
+        onBack={handleBackToRoleSelect}
+        selectedMember={selectedCommandCoreMember}
+        theme={theme}
+        masterGender={status.settings.masterGender}
+      />
+    );
+  }
+
   if (showStaffMemberSelect) {
     return (
       <StaffMemberSelectScreen
         onSelect={handleStaffMemberSelection}
+        onBack={handleBackToRoleSelect}
         selectedMember={selectedStaffMember}
         theme={theme}
       />

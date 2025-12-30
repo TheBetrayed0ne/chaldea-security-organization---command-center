@@ -1,10 +1,8 @@
 
 /**
  * CHALDEA ARCHIVAL DATA: CASTER CLASS IMAGE REGISTRY
- * Source: FGO Fandom Wiki (Stage 1 Redirects)
+ * Source: Local bundled images
  */
-
-const WIKI_BASE = "https://fategrandorder.fandom.com/wiki/Special:FilePath/";
 
 export const CASTER_IMAGES: Record<string, string> = {
   S031: `${WIKI_BASE}S031_Stage1.webp`, // Medea
@@ -28,7 +26,7 @@ export const CASTER_IMAGES: Record<string, string> = {
   S109: `${WIKI_BASE}S109_Stage1.webp`, // Irisviel
   S113: `${WIKI_BASE}S113_Stage1.webp`, // Xuanzang Sanzang
   S117: `${WIKI_BASE}S117_Stage1.webp`, // Nitocris
-  S127: `https://static.wikia.nocookie.net/fategrandorder/images/e/e0/S127_Stage1.webp/revision/latest?cb=20220911072058`, // Da Vinci (Caster)
+  S127: `/images/servants/.webp`, // Da Vinci (Caster)
   S128: `${WIKI_BASE}S128_Stage1.webp`, // Marie Antoinette (Caster)
   S138: `${WIKI_BASE}S138_Stage1.webp`, // Illyasviel
   S142: `${WIKI_BASE}S142_Stage1.webp`, // Gilgamesh (Caster)

@@ -1,111 +1,23 @@
+// File: components/HRDepartment.tsx
 import React, { useState, useMemo } from 'react';
 import { useGlobalStatus } from '../context/StatusContext.tsx';
 import { soundService } from '../services/soundService.ts';
 
-type HRTab = 'Dashboard' | 'Personnel Files' | 'Concerns' | 'Policy' | 'Wellbeing' | 'Boundaries';
-
-interface StaffMember {
-  id: string;
-  name: string;
-  role: string;
-  dept: string;
-  type: 'Staff' | 'Servant' | 'Entity';
-  status: string;
-  clearance: string;
-  tags: string[];
-}
-
-// Helper components moved to top for safer execution
-const MediationItem = ({ room, time, parties, status }: any) => (
-  <div className="flex gap-4 items-center group">
-     <div className="w-10 py-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center rounded">
-        <div className="text-[10px] font-bold text-slate-800 dark:text-slate-200">{room}</div>
-     </div>
-     <div className="flex-1 min-w-0">
-        <div className="text-[11px] font-bold text-slate-700 dark:text-slate-300 truncate">{parties}</div>
-        <div className="text-[8px] font-mono text-slate-500 dark:text-slate-600 uppercase">{time} JST // {status}</div>
-     </div>
-  </div>
-);
-
-const QueueItem = ({ stage, label, date }: any) => (
-  <div className="flex justify-between items-center p-3 border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-900/30 rounded transition-all cursor-help">
-     <div>
-        <div className="text-[11px] font-bold text-slate-800 dark:text-slate-300">{label}</div>
-        <div className="text-[8px] font-mono text-slate-500 dark:text-slate-600 uppercase">{date}</div>
-     </div>
-     <span className={`text-[8px] font-mono px-1.5 py-0.5 rounded border ${
-        stage === 'Resolved' ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900' :
-        stage === 'Intake' ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700' :
-        'bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900'
-     }`}>{stage.toUpperCase()}</span>
-  </div>
-);
-
-const DetailField = ({ label, value }: any) => (
-  <div>
-    <p className="text-[8px] font-mono text-slate-500 dark:text-slate-600 uppercase mb-0.5">{label}</p>
-    <p className="text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-tighter">{value}</p>
-  </div>
-);
-
-const StatusBox = ({ label, val, color = "text-slate-600 dark:text-slate-400" }: any) => (
-  <div className="bg-slate-50 dark:bg-slate-950 p-2 rounded border border-slate-200 dark:border-slate-800">
-    <p className="text-[7px] font-mono text-slate-400 dark:text-slate-700 uppercase">{label}</p>
-    <p className={`text-[10px] font-black uppercase ${color}`}>{val}</p>
-  </div>
-);
-
-const BoundaryRule = ({ zone, rules, color }: any) => (
-  <div>
-     <h5 className={`text-xs font-black uppercase mb-2 ${color}`}>{zone} Protocol</h5>
-     <ul className="space-y-1 pl-3">
-        {rules.map((r: string, i: number) => (
-          <li key={i} className="text-[10px] text-slate-600 dark:text-slate-500 font-mono flex gap-2">
-             <span className="opacity-30">#</span> {r}
-          </li>
-        ))}
-     </ul>
-  </div>
-);
-
-const HR_STAFF: StaffMember[] = [
-  { id: 'H1', name: 'Fujimaru Ritsuka', role: 'Master', dept: 'Command', type: 'Staff', status: 'Nominal', clearance: 'LEVEL_EX', tags: ['High Stress Risk', 'Existential Weight'] },
-  { id: 'H2', name: 'Mash Kyrielight', role: 'Sub-Servant', dept: 'Security', type: 'Servant', status: 'Stable', clearance: 'LEVEL_5', tags: ['Overworked', 'Protective Anchor'] },
-  { id: 'H3', name: 'Kyle', role: 'Foreigner', dept: 'Warden', type: 'Entity', status: 'Lazy', clearance: 'BEYOND_DOMAIN', tags: ['Non-humanoid cognition', 'Safeguarding Anchor', 'Requires Accommodations'] },
-  { id: 'H4', name: 'Vending-A1', role: 'Sustenance Logic', dept: 'Logistics', type: 'Entity', status: 'Moody', clearance: 'LEVEL_1', tags: ['Ensouled Asset', 'Requires Accommodations'] },
-  { id: 'H5', name: 'Medea', role: 'Head of Magecraft', dept: 'Magecraft', type: 'Servant', status: 'Stable', clearance: 'LEVEL_4', tags: ['Ritual Specialist', 'Independent Action'] },
-  { id: 'H6', name: 'EMIYA', role: 'Executive Chef', dept: 'Culinary', type: 'Servant', status: 'Nominal', clearance: 'LEVEL_3', tags: ['Kitchen Sovereign', 'Pragmatic'] },
-  { id: 'H7', name: 'Goredolf Musik', role: 'Director', dept: 'Command', type: 'Staff', status: 'Stressed', clearance: 'LEVEL_EX', tags: ['Dietary Management', 'High Stress Risk'] },
-];
-
-const POLICIES = [
-  { 
-    id: "P01", 
-    title: "Standard Code of Conduct v4.1", 
-    cat: "Mandatory", 
-    content: "All staff, Servants, and autonomous entities are required to adhere to the standard safety protocols. (1) Respect the Saint Graph integrity of others. (2) Do not engage in unauthorized Rayshifting. (3) Report all temporal anomalies to TRISMEGISTUS II immediately. Failure to comply results in mandatory retraining with Nurse Nightingale."
-  },
-  { 
-    id: "P02", 
-    title: "Relationships & Consent (Staff-Servant)", 
-    cat: "Guidance", 
-    content: "Interactions between staff and Heroic Spirits must remain professional during operational hours. Consent is absolute regardless of alignment or Class. Servants with 'Madness Enhancement' or 'Independent Action' are not exempt from facility boundaries. If a Servant proposes a contract involving your soul, contact HR-01 before signing."
-  },
-  { 
-    id: "P03", 
-    title: "Not Everything Is Human-Shaped", 
-    cat: "Technical", 
-    content: "Confirming that yes, some colleagues are ghosts, Outer Gods, or sentient furniture. (1) Do not stare at extra limbs unless medically necessary. (2) The vending machine in Wing 03 has been recognized as an ensouled asset; do not kick it if it eats your QP. (3) If a coworker begins speaking in a language that causes your ears to bleed, politely excuse yourself and seek Medical."
-  },
-];
+import { HRTab, StaffMember } from './HRDepartment/types/index.ts';
+import { HR_STAFF } from './HRDepartment/config/staffData.ts';
+import { POLICIES } from './HRDepartment/config/policiesData.ts';
+import { MediationItem } from './HRDepartment/components/MediationItem.tsx';
+import { QueueItem } from './HRDepartment/components/QueueItem.tsx';
+import { DetailField } from './HRDepartment/components/DetailField.tsx';
+import { StatusBox } from './HRDepartment/components/StatusBox.tsx';
+import { BoundaryRule } from './HRDepartment/components/BoundaryRule.tsx';
 
 const HRDepartment: React.FC = () => {
   const { status } = useGlobalStatus();
   const [activeTab, setActiveTab] = useState<HRTab>('Dashboard');
   const [selectedPerson, setSelectedPerson] = useState<StaffMember | null>(null);
   const [typeFilter, setTypeFilter] = useState<string>('All');
-  
+
   // Concerns Form State
   const [concernCategory, setConcernCategory] = useState('Interpersonal / Harassment');
   const [concernDescription, setConcernDescription] = useState('');
@@ -116,6 +28,9 @@ const HRDepartment: React.FC = () => {
   // Policy State
   const [selectedPolicyCat, setSelectedPolicyCat] = useState<string>('All');
   const [readingPolicyId, setReadingPolicyId] = useState<string | null>(null);
+
+  // Get zoom behavior class based on settings
+  const zoomClass = status.settings.display.allowSmallWindowGrowth ? '' : 'zoom-fixed';
 
   const switchTab = (tab: HRTab) => {
     soundService.playSelect();
@@ -152,7 +67,27 @@ const HRDepartment: React.FC = () => {
   };
 
   return (
-    <div className="p-10 space-y-8 animate-in fade-in duration-700 max-w-7xl mx-auto font-sans">
+    <div className={`p-10 space-y-8 animate-in fade-in duration-700 max-w-7xl mx-auto font-sans ${zoomClass}`}>
+      <style>{`
+        .zoom-fixed {
+          zoom: ${1 / (window.devicePixelRatio || 1)};
+        }
+        @media (min-resolution: 120dpi) {
+          .zoom-fixed {
+            zoom: 0.833;
+          }
+        }
+        @media (min-resolution: 144dpi) {
+          .zoom-fixed {
+            zoom: 0.694;
+          }
+        }
+        @media (min-resolution: 192dpi) {
+          .zoom-fixed {
+            zoom: 0.521;
+          }
+        }
+      `}</style>
       <header className="flex justify-between items-end border-b border-slate-200 dark:border-slate-900 pb-8">
         <div>
           <h2 className="text-3xl font-black tracking-tight text-black dark:text-slate-100 flex items-center gap-4 uppercase">
@@ -329,9 +264,280 @@ const HRDepartment: React.FC = () => {
         </div>
       )}
 
-      {/* Concerns, Policy, Wellbeing, and Boundaries tabs remain implemented similarly with refined light mode contrast */}
-      {/* ... (Implementation logic continues for other tabs) */}
-      
+      {activeTab === 'Concerns' && (
+        <div className="max-w-3xl mx-auto animate-in fade-in duration-500">
+          <div className="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-8 rounded-lg shadow-sm dark:shadow-none">
+            <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase mb-2">Submit a Concern</h3>
+            <p className="text-[10px] text-slate-500 dark:text-slate-600 font-mono uppercase tracking-wider mb-6">
+              Confidential reporting for workplace issues, conflicts, or safety concerns
+            </p>
+
+            {submitSuccess ? (
+              <div className="p-6 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-lg text-center space-y-4 animate-in zoom-in-95">
+                <div className="text-4xl">✓</div>
+                <h4 className="text-lg font-bold text-emerald-700 dark:text-emerald-400 uppercase">Concern Submitted</h4>
+                <p className="text-sm text-emerald-600 dark:text-emerald-500">
+                  Your concern has been logged. HR will review within 24 hours.
+                </p>
+                <button
+                  onClick={() => setSubmitSuccess(false)}
+                  className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs font-bold uppercase rounded hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
+                >
+                  Submit Another
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleConcernSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-2">Category</label>
+                  <select
+                    value={concernCategory}
+                    onChange={(e) => setConcernCategory(e.target.value)}
+                    className="w-full p-3 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 rounded text-sm"
+                  >
+                    <option>Interpersonal / Harassment</option>
+                    <option>Safety / Security</option>
+                    <option>Discrimination / Bias</option>
+                    <option>Policy Violation</option>
+                    <option>Workload / Burnout</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-2">Description</label>
+                  <textarea
+                    value={concernDescription}
+                    onChange={(e) => setConcernDescription(e.target.value)}
+                    rows={6}
+                    placeholder="Please describe the concern in detail..."
+                    className="w-full p-3 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 rounded text-sm resize-none"
+                    required
+                  />
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="anonymous"
+                    checked={isAnonymous}
+                    onChange={(e) => setIsAnonymous(e.target.checked)}
+                    className="w-4 h-4"
+                  />
+                  <label htmlFor="anonymous" className="text-sm text-slate-600 dark:text-slate-400">
+                    Submit anonymously
+                  </label>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full py-3 text-sm font-bold uppercase rounded transition-colors ${
+                    isSubmitting
+                      ? 'bg-slate-400 text-slate-200 cursor-not-allowed'
+                      : 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                  }`}
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Concern'}
+                </button>
+              </form>
+            )}
+          </div>
+
+          <div className="mt-8 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 p-6 rounded-lg">
+            <h4 className="text-xs font-bold text-blue-700 dark:text-blue-400 uppercase mb-2">Concern Queue Status</h4>
+            <div className="space-y-2">
+              <QueueItem stage="Intake" label="Concern #2401-A: Workload Distribution" date="2024-12-28" />
+              <QueueItem stage="Review" label="Concern #2401-B: Team Conflict Resolution" date="2024-12-27" />
+              <QueueItem stage="Resolved" label="Concern #2400-Z: Equipment Request" date="2024-12-20" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'Policy' && (
+        <div className="max-w-5xl mx-auto animate-in fade-in duration-500">
+          <div className="flex gap-4 mb-6">
+            {['All', 'Mandatory', 'Guidance', 'Technical'].map(cat => (
+              <button
+                key={cat}
+                onClick={() => handleCategoryClick(cat)}
+                className={`px-4 py-2 text-xs font-bold uppercase rounded transition-all ${
+                  selectedPolicyCat === cat
+                    ? 'bg-cyan-600 text-white'
+                    : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:border-cyan-400'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            {POLICIES.filter(p => selectedPolicyCat === 'All' || p.cat === selectedPolicyCat).map(policy => (
+              <div key={policy.id} className="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm dark:shadow-none">
+                <button
+                  onClick={() => {
+                    soundService.playClick();
+                    setReadingPolicyId(readingPolicyId === policy.id ? null : policy.id);
+                  }}
+                  className="w-full p-6 text-left hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors flex justify-between items-center"
+                >
+                  <div>
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-500">{policy.id}</span>
+                      <span className={`text-[8px] px-2 py-0.5 rounded border font-bold uppercase ${
+                        policy.cat === 'Mandatory' ? 'bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400' :
+                        policy.cat === 'Guidance' ? 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900 text-blue-600 dark:text-blue-400' :
+                        'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
+                      }`}>
+                        {policy.cat}
+                      </span>
+                    </div>
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">{policy.title}</h4>
+                  </div>
+                  <span className="text-slate-400">{readingPolicyId === policy.id ? '▼' : '▶'}</span>
+                </button>
+
+                {readingPolicyId === policy.id && (
+                  <div className="p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 animate-in slide-in-from-top-2">
+                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{policy.content}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'Wellbeing' && (
+        <div className="max-w-6xl mx-auto animate-in fade-in duration-500">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              <div className="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-8 rounded-lg shadow-sm dark:shadow-none">
+                <h3 className="text-lg font-black text-slate-800 dark:text-slate-100 uppercase mb-4">Mental Health Resources</h3>
+                <div className="space-y-4">
+                  <div className="p-4 border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/20 rounded">
+                    <h4 className="text-sm font-bold text-emerald-700 dark:text-emerald-400 mb-2">24/7 Crisis Support</h4>
+                    <p className="text-xs text-emerald-600 dark:text-emerald-500">Contact Medical Bay for immediate assistance with mental health emergencies.</p>
+                  </div>
+
+                  <div className="p-4 border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/20 rounded">
+                    <h4 className="text-sm font-bold text-blue-700 dark:text-blue-400 mb-2">Counseling Services</h4>
+                    <p className="text-xs text-blue-600 dark:text-blue-500">Weekly sessions available with certified professionals. Book via Medical or HR.</p>
+                  </div>
+
+                  <div className="p-4 border border-purple-200 dark:border-purple-900 bg-purple-50 dark:bg-purple-950/20 rounded">
+                    <h4 className="text-sm font-bold text-purple-700 dark:text-purple-400 mb-2">Peer Support Groups</h4>
+                    <p className="text-xs text-purple-600 dark:text-purple-500">Join support groups for stress management, rayshift recovery, and more.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-8 rounded-lg shadow-sm dark:shadow-none">
+                <h3 className="text-lg font-black text-slate-800 dark:text-slate-100 uppercase mb-4">Accommodations Requests</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                  Chaldea provides accommodations for physical, mental, and existential needs. All requests are confidential.
+                </p>
+                <button className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-bold uppercase rounded transition-colors">
+                  Request Accommodation
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-6 rounded-lg shadow-sm dark:shadow-none">
+                <h4 className="text-xs font-bold text-cyan-600 dark:text-cyan-500 uppercase mb-4">Quick Links</h4>
+                <div className="space-y-2">
+                  <a href="#" className="block p-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded transition-colors">
+                    → Self-Care Resources
+                  </a>
+                  <a href="#" className="block p-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded transition-colors">
+                    → Stress Management
+                  </a>
+                  <a href="#" className="block p-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded transition-colors">
+                    → Grief Support
+                  </a>
+                  <a href="#" className="block p-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded transition-colors">
+                    → Work-Life Balance
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'Boundaries' && (
+        <div className="max-w-5xl mx-auto animate-in fade-in duration-500">
+          <div className="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-8 rounded-lg shadow-sm dark:shadow-none mb-8">
+            <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 uppercase mb-4">Facility Boundaries & Protocols</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
+              Clear boundaries ensure safety and respect across all personnel types. These protocols are non-negotiable.
+            </p>
+
+            <div className="space-y-8">
+              <BoundaryRule
+                zone="Physical Contact"
+                color="text-rose-600 dark:text-rose-400"
+                rules={[
+                  "Obtain verbal consent before any physical contact",
+                  "Respect personal space (minimum 1 meter unless authorized)",
+                  "Combat training requires documented safety agreements",
+                  "Medical staff have emergency override authority only"
+                ]}
+              />
+
+              <BoundaryRule
+                zone="Mental / Psychic"
+                color="text-purple-600 dark:text-purple-400"
+                rules={[
+                  "No unauthorized telepathy, mind-reading, or mental influence",
+                  "Servants with mental interference abilities must register with HR",
+                  "Dreamwalking requires written consent from all parties",
+                  "Report suspected mental manipulation immediately"
+                ]}
+              />
+
+              <BoundaryRule
+                zone="Temporal / Reality"
+                color="text-cyan-600 dark:text-cyan-400"
+                rules={[
+                  "No personal timeline alterations without TRISMEGISTUS approval",
+                  "Reality Marbles must be pre-authorized for use in facility",
+                  "Do not bring items from other timelines without clearance",
+                  "Report all temporal anomalies within 5 minutes"
+                ]}
+              />
+
+              <BoundaryRule
+                zone="Existential / Contractual"
+                color="text-amber-600 dark:text-amber-400"
+                rules={[
+                  "Soul contracts require HR witness and legal review",
+                  "No cursing, geassing, or binding without mutual consent",
+                  "Entity rights apply regardless of physical form",
+                  "Servants cannot be 'loaned' without their explicit agreement"
+                ]}
+              />
+            </div>
+          </div>
+
+          <div className="bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900 p-6 rounded-lg">
+            <h4 className="text-sm font-bold text-rose-700 dark:text-rose-400 uppercase mb-3">Reporting Violations</h4>
+            <p className="text-sm text-rose-600 dark:text-rose-500 mb-4">
+              Boundary violations are taken seriously. Report any incidents to HR or Medical immediately.
+            </p>
+            <button
+              onClick={() => switchTab('Concerns')}
+              className="px-6 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold uppercase rounded transition-colors"
+            >
+              Report Violation
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

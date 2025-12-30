@@ -7,7 +7,7 @@ const Artoria: Servant = {
   name: 'Artoria Pendragon',
   class: 'Saber',
   rarity: 5,
-  image: 'https://static.wikia.nocookie.net/fategrandorder/images/0/0b/Sabercardborder1.webp/revision/latest?cb=20221104083319',
+  image: '/images/servants/S001.webp',
   description: 'The embodiment of chivalry and nobility, Artoria stands proud in silver armor with a flowing blue dress beneath. emerald eyes—like someone who has borne the weight of a kingdom far too long.',
   stats: { atk: 11221, hp: 15150, str: 'B', end: 'B', agi: 'B', man: 'A', lck: 'A+', np: 'A++' },
   noblePhantasm: { name: 'Excalibur', rank: 'A++', type: 'Anti-Fortress' },

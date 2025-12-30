@@ -10,8 +10,8 @@ import { SettingsDrawer } from './settings/SettingsDrawer.tsx';
 import { getDepartmentNav } from '../department-hub/config/departmentNav.ts';
 import { getStaffDesignation } from '../department-hub/config/departmentLabels.ts';
 
-const Layout: React.FC<LayoutProps> = ({ children, onReturnToPortal }) => {
-  const { status, updateSettings, setActiveDepartment } = useGlobalStatus();
+const Layout: React.FC<LayoutProps> = ({ children, onReturnToPortal, onChangeDepartment }) => {
+  const { status, updateSettings } = useGlobalStatus();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -83,7 +83,7 @@ const Layout: React.FC<LayoutProps> = ({ children, onReturnToPortal }) => {
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded bg-slate-50 dark:bg-slate-950 flex items-center justify-center border border-slate-200 dark:border-cyan-500/20 overflow-hidden shadow-sm dark:shadow-[0_0_20px_rgba(34,211,238,0.15)] group transition-all hover:border-cyan-500/40">
               <img 
-                src="https://ih1.redbubble.net/image.1540769570.5309/flat,750x,075,f-pad,750x1000,f8f8f8.u2.webp" 
+                src="/images/ui/chaldea-logo.webp" 
                 alt="Chaldea Symbol" 
                 className="w-full h-full object-contain scale-110 drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]"
               />
@@ -101,10 +101,6 @@ const Layout: React.FC<LayoutProps> = ({ children, onReturnToPortal }) => {
               <button
                 onClick={() => {
                   soundService.playTransition();
-                  // Clear department when going back to portal
-                  if (status.userRole === 'staff') {
-                    setActiveDepartment(null);
-                  }
                   onReturnToPortal();
                 }}
                 className="w-full flex items-center justify-between px-3 py-2 rounded text-[10px] font-bold tracking-widest uppercase border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-slate-400"
@@ -115,7 +111,7 @@ const Layout: React.FC<LayoutProps> = ({ children, onReturnToPortal }) => {
             </div>
           )}
 
-          {status.userRole === 'staff' && status.activeDepartment && (
+          {status.userRole === 'staff' && status.activeDepartment && onChangeDepartment && (
             <div className="px-3 mb-4">
               <div className="p-3 rounded bg-cyan-500/10 border border-cyan-500/30">
                 <div className="text-[8px] text-slate-500 dark:text-slate-600 uppercase tracking-wider mb-1">Active Department</div>
@@ -123,9 +119,7 @@ const Layout: React.FC<LayoutProps> = ({ children, onReturnToPortal }) => {
                 <button
                   onClick={() => {
                     soundService.playClick();
-                    // Only clear the department, don't go back to portal
-                    // This will show the Department Hub
-                    setActiveDepartment(null);
+                    onChangeDepartment();
                   }}
                   className="text-[8px] text-slate-400 hover:text-cyan-400 uppercase tracking-wider mt-2 transition-colors"
                 >

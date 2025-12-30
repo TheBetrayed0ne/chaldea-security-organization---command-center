@@ -4,6 +4,7 @@ import React from 'react';
 import { Servant } from '../../../types.ts';
 import { ActiveTab, RolePolicy } from '../types.ts';
 import { soundService } from '../../../services/soundService.ts';
+import { useGlobalStatus } from '../../../context/StatusContext.tsx';
 import { DetailTabs } from './DetailTabs.tsx';
 import { OverviewTab } from './tabs/OverviewTab.tsx';
 import { OperationalTab } from './tabs/OperationalTab.tsx';
@@ -18,21 +19,41 @@ interface DetailOverlayProps {
   onClose: () => void;
 }
 
-export const DetailOverlay: React.FC<DetailOverlayProps> = ({ 
-  servant, 
-  activeTab, 
+export const DetailOverlay: React.FC<DetailOverlayProps> = ({
+  servant,
+  activeTab,
   policy,
-  onTabChange, 
-  onClose 
+  onTabChange,
+  onClose
 }) => {
+  const { status } = useGlobalStatus();
+
+  // Get zoom behavior class based on settings
+  const zoomClass = status.settings.display.allowSmallWindowGrowth ? '' : 'zoom-fixed';
+
   return (
     <>
-      <div 
+      <style>{`
+        .zoom-fixed {
+          zoom: ${1 / (window.devicePixelRatio || 1)};
+        }
+        @media (min-resolution: 120dpi) {
+          .zoom-fixed { zoom: 0.833; }
+        }
+        @media (min-resolution: 144dpi) {
+          .zoom-fixed { zoom: 0.694; }
+        }
+        @media (min-resolution: 192dpi) {
+          .zoom-fixed { zoom: 0.521; }
+        }
+      `}</style>
+
+      <div
         className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[45] animate-in fade-in duration-300"
         onClick={onClose}
       />
-      
-      <div className="fixed top-14 bottom-0 right-0 w-full max-w-[550px] bg-slate-900 border-l border-slate-800 shadow-2xl z-50 flex flex-col animate-in slide-in-from-right-full duration-500">
+
+      <div className={`fixed top-14 bottom-0 right-0 w-full max-w-[550px] bg-slate-900 border-l border-slate-800 shadow-2xl z-50 flex flex-col animate-in slide-in-from-right-full duration-500 ${zoomClass}`}>
         <div className="p-8 border-b border-slate-800 bg-slate-950/40 relative">
           <button 
             onClick={onClose} 

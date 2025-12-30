@@ -18,6 +18,9 @@ export const ProfileOverlay: React.FC<ProfileOverlayProps> = ({ onClose }) => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState('');
 
+  // Get zoom behavior class based on settings
+  const zoomClass = status.settings.display.allowSmallWindowGrowth ? '' : 'zoom-fixed';
+
   const toggleGender = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     
@@ -106,7 +109,21 @@ export const ProfileOverlay: React.FC<ProfileOverlayProps> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-300 p-8">
-      <div className="w-full max-w-4xl bg-slate-900 border border-cyan-500/30 rounded-xl shadow-[0_0_100px_rgba(6,182,212,0.1)] overflow-hidden flex flex-col relative">
+      <style>{`
+        .zoom-fixed {
+          zoom: ${1 / (window.devicePixelRatio || 1)};
+        }
+        @media (min-resolution: 120dpi) {
+          .zoom-fixed { zoom: 0.833; }
+        }
+        @media (min-resolution: 144dpi) {
+          .zoom-fixed { zoom: 0.694; }
+        }
+        @media (min-resolution: 192dpi) {
+          .zoom-fixed { zoom: 0.521; }
+        }
+      `}</style>
+      <div className={`w-full max-w-4xl bg-slate-900 border border-cyan-500/30 rounded-xl shadow-[0_0_100px_rgba(6,182,212,0.1)] overflow-hidden flex flex-col relative ${zoomClass}`}>
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
         
         <header className="p-8 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">

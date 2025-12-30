@@ -19,18 +19,34 @@ export const LeylineChartCard: React.FC<LeylineChartCardProps> = ({
   chartDetail,
   reduceMotion
 }) => {
-  const { status } = useGlobalStatus();
+  const { status, updateSettings } = useGlobalStatus();
   const isDark = status.settings.theme === 'dark';
+
+  const handleRangeChange = (range: string) => {
+    updateSettings({ chartRange: range as any });
+  };
 
   return (
     <div className={`lg:col-span-8 bg-white dark:bg-slate-900/20 border border-slate-200 dark:border-slate-900 p-8 rounded relative shadow-sm dark:shadow-none ${viewMode === 'basic' ? 'h-[300px]' : ''}`}>
       <div className="flex justify-between items-start mb-8">
-        <h3 className="text-[10px] font-mono text-slate-500 dark:text-slate-500 uppercase tracking-widest font-bold flex items-center gap-3">
-          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse-soft"></span>
-          Leyline Energy Flux [MW/h]
-        </h3>
+        <div className="flex flex-col gap-3">
+          <h3 className="text-[10px] font-mono text-slate-500 dark:text-slate-500 uppercase tracking-widest font-bold flex items-center gap-3">
+            <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse-soft"></span>
+            Leyline Energy Flux [MW/h]
+          </h3>
+          <div className="flex gap-1">
+            {['1h', '6h', '24h', '72h'].map(r => (
+              <button
+                key={r}
+                onClick={() => handleRangeChange(r)}
+                className={`px-2.5 py-1 border text-[9px] rounded transition-all font-bold ${chartRange === r ? 'bg-blue-600 text-white border-blue-500' : 'text-slate-600 dark:text-slate-500 border-slate-300 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-600'}`}
+              >
+                {r.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="text-[8px] font-mono text-slate-400 dark:text-slate-700 uppercase space-x-4">
-          <span className="text-blue-500 dark:text-blue-400">Range: {chartRange}</span>
           <span className="text-blue-500 dark:text-blue-400">Mode: {chartDetail}</span>
         </div>
       </div>

@@ -34,6 +34,12 @@ export interface GlobalStatus {
     customNames: Record<string, string>;
   };
   activeDepartment: string | null;
+  // Command Core identity
+  commandCore: {
+    memberId: string | null;
+    memberName: string | null;
+    permissions: string[];
+  };
   // UI Configuration Settings
   settings: {
     viewMode: 'basic' | 'standard' | 'analyst';
@@ -56,6 +62,9 @@ export interface GlobalStatus {
       reduceMotion: boolean;
       largeText: boolean;
     };
+    display: {
+      allowSmallWindowGrowth: boolean;
+    };
   };
 }
 
@@ -70,6 +79,7 @@ interface StatusContextType {
   setStaffMember: (memberId: string, memberName: string, permissions: string[]) => void;
   setActiveDepartment: (department: string | null) => void;
   setCustomNameForDepartment: (departmentId: string, customName: string) => void;
+  setCommandCoreMember: (memberId: string, memberName: string, permissions: string[]) => void;
 }
 
 const DEFAULT_SETTINGS: GlobalStatus['settings'] = {
@@ -92,6 +102,9 @@ const DEFAULT_SETTINGS: GlobalStatus['settings'] = {
     highContrast: false,
     reduceMotion: false,
     largeText: false,
+  },
+  display: {
+    allowSmallWindowGrowth: false,
   },
 };
 
@@ -125,6 +138,11 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         customNames: savedData.staff?.customNames || {},
       },
       activeDepartment: savedData.activeDepartment || null,
+      commandCore: {
+        memberId: savedData.commandCore?.memberId || null,
+        memberName: savedData.commandCore?.memberName || null,
+        permissions: savedData.commandCore?.permissions || [],
+      },
       settings: DEFAULT_SETTINGS,
     };
   });
@@ -220,16 +238,28 @@ export const StatusProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }));
   }, []);
 
-  // Persist staff and department to localStorage
+  const setCommandCoreMember = useCallback((memberId: string, memberName: string, permissions: string[]) => {
+    setStatus(prev => ({
+      ...prev,
+      commandCore: {
+        memberId,
+        memberName,
+        permissions
+      }
+    }));
+  }, []);
+
+  // Persist staff, department, and command core to localStorage
   useEffect(() => {
     localStorage.setItem('chaldea-session', JSON.stringify({
       staff: status.staff,
-      activeDepartment: status.activeDepartment
+      activeDepartment: status.activeDepartment,
+      commandCore: status.commandCore
     }));
-  }, [status.staff, status.activeDepartment]);
+  }, [status.staff, status.activeDepartment, status.commandCore]);
 
   return (
-    <StatusContext.Provider value={{ status, updateStatus, updateSettings, addAlert, clearAlerts, resetToDefaults, setUserRole, setStaffMember, setActiveDepartment, setCustomNameForDepartment }}>
+    <StatusContext.Provider value={{ status, updateStatus, updateSettings, addAlert, clearAlerts, resetToDefaults, setUserRole, setStaffMember, setActiveDepartment, setCustomNameForDepartment, setCommandCoreMember }}>
       {children}
     </StatusContext.Provider>
   );

@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useGlobalStatus } from '../context/StatusContext.tsx';
 
 const PERSONNEL = [
   { name: 'Fujimaru Ritsuka', role: 'Master', dept: 'Command', stats: 'EX Resilience' },
@@ -17,8 +18,27 @@ const PERSONNEL = [
 ];
 
 const PersonnelRecords: React.FC = () => {
+  const { status } = useGlobalStatus();
+
+  // Get zoom behavior class based on settings
+  const zoomClass = status.settings.display.allowSmallWindowGrowth ? '' : 'zoom-fixed';
+
   return (
-    <div className="p-8 space-y-8 animate-in zoom-in-95 duration-500">
+    <div className={`p-8 space-y-8 animate-in zoom-in-95 duration-500 ${zoomClass}`}>
+      <style>{`
+        .zoom-fixed {
+          zoom: ${1 / (window.devicePixelRatio || 1)};
+        }
+        @media (min-resolution: 120dpi) {
+          .zoom-fixed { zoom: 0.833; }
+        }
+        @media (min-resolution: 144dpi) {
+          .zoom-fixed { zoom: 0.694; }
+        }
+        @media (min-resolution: 192dpi) {
+          .zoom-fixed { zoom: 0.521; }
+        }
+      `}</style>
       <header className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-black dark:text-slate-100 tracking-tighter">MEDICAL & PERSONNEL ARCHIVE</h2>

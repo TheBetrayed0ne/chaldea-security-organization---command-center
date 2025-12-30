@@ -1,10 +1,8 @@
 
 /**
  * CHALDEA ARCHIVAL DATA: MOON CANCER CLASS IMAGE REGISTRY
- * Source: FGO Fandom Wiki (Stage 1 Redirects)
+ * Source: Local bundled images
  */
-
-const WIKI_BASE = "https://fategrandorder.fandom.com/wiki/Special:FilePath/";
 
 export const MOON_CANCER_IMAGES: Record<string, string> = {
   S166: `${WIKI_BASE}S166_Stage1.webp`, // BB

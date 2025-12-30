@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Singularity } from '../types';
+import { useGlobalStatus } from '../context/StatusContext.tsx';
 
 const MOCK_SINGULARITIES: Singularity[] = [
   { id: 'F', name: 'Flame City F', location: 'Fuyuki, Japan', era: '2004 AD', status: 'RESOLVED', threatLevel: 2 },
@@ -12,8 +13,27 @@ const MOCK_SINGULARITIES: Singularity[] = [
 ];
 
 const Singularities: React.FC = () => {
+  const { status } = useGlobalStatus();
+
+  // Get zoom behavior class based on settings
+  const zoomClass = status.settings.display.allowSmallWindowGrowth ? '' : 'zoom-fixed';
+
   return (
-    <div className="space-y-6 animate-in slide-in-from-right-4 duration-500 p-8">
+    <div className={`space-y-6 animate-in slide-in-from-right-4 duration-500 p-8 ${zoomClass}`}>
+      <style>{`
+        .zoom-fixed {
+          zoom: ${1 / (window.devicePixelRatio || 1)};
+        }
+        @media (min-resolution: 120dpi) {
+          .zoom-fixed { zoom: 0.833; }
+        }
+        @media (min-resolution: 144dpi) {
+          .zoom-fixed { zoom: 0.694; }
+        }
+        @media (min-resolution: 192dpi) {
+          .zoom-fixed { zoom: 0.521; }
+        }
+      `}</style>
       <header>
         <h2 className="text-2xl font-bold tracking-tight text-black dark:text-slate-100 uppercase">TEMPORAL ANOMALIES</h2>
         <p className="text-rose-600 dark:text-rose-500/70 font-mono text-xs uppercase mt-1 tracking-widest">Warning: Human Order Foundation Collapsing</p>
@@ -34,7 +54,38 @@ const Singularities: React.FC = () => {
               <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500 uppercase tracking-widest">ID: SINGULARITY_{s.id}</span>
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors mt-1">{s.name}</h3>
             </div>
-            {/* ... stats display logic same as before */}
+
+            <div className="space-y-3">
+              <div>
+                <p className="text-[8px] font-mono text-slate-500 dark:text-slate-600 uppercase mb-1">Location</p>
+                <p className="text-sm font-bold text-slate-700 dark:text-slate-300">{s.location}</p>
+              </div>
+
+              <div>
+                <p className="text-[8px] font-mono text-slate-500 dark:text-slate-600 uppercase mb-1">Era</p>
+                <p className="text-sm font-bold text-slate-700 dark:text-slate-300">{s.era}</p>
+              </div>
+
+              <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-800">
+                <p className="text-[8px] font-mono text-slate-500 dark:text-slate-600 uppercase">Threat Level</p>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((level) => (
+                    <div
+                      key={level}
+                      className={`w-2 h-2 rounded-full ${
+                        level <= s.threatLevel
+                          ? s.threatLevel >= 5
+                            ? 'bg-rose-500'
+                            : s.threatLevel >= 4
+                            ? 'bg-amber-500'
+                            : 'bg-emerald-500'
+                          : 'bg-slate-200 dark:bg-slate-700'
+                      }`}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>

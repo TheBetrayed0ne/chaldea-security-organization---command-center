@@ -1,16 +1,14 @@
 
 /**
  * CHALDEA ARCHIVAL DATA: RIDER CLASS IMAGE REGISTRY
- * Source: FGO Fandom Wiki (Stage 1 Redirects)
+ * Source: Local bundled images
  */
-
-const WIKI_BASE = "https://fategrandorder.fandom.com/wiki/Special:FilePath/";
 
 export const RIDER_IMAGES: Record<string, string> = {
   S023: `${WIKI_BASE}S023_Stage1.webp`, // Medusa
   S024: `${WIKI_BASE}S024_Stage1.webp`, // Georgios
   S025: `${WIKI_BASE}S025_Stage1.webp`, // Edward Teach
-  S026: `https://static.wikia.nocookie.net/fategrandorder/images/f/fc/S026_Stage1.webp/revision/latest?cb=20220910084119`, // Boudica
+  S026: `/images/servants/.webp`, // Boudica
   S027: `${WIKI_BASE}S027_Stage1.webp`, // Ushiwakamaru
   S028: `${WIKI_BASE}S028_Stage1.webp`, // Alexander
   S029: `${WIKI_BASE}S029_Stage1.webp`, // Marie Antoinette

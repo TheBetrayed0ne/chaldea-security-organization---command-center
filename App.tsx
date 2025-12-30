@@ -15,6 +15,7 @@ import HRDepartment from './components/HRDepartment.tsx';
 import Anomalies from './components/Anomalies.tsx';
 import Hearthspace from './components/Hearthspace.tsx';
 import ShebaLens from './components/ShebaLens.tsx';
+import ReactorControl from './components/ReactorControl/index.ts';
 import { StatusProvider, useGlobalStatus, UserRole } from './context/StatusContext.tsx';
 import { soundService } from './services/soundService.ts';
 
@@ -66,18 +67,38 @@ const TransitionLoadingScreen = () => (
 );
 
 const AppContent: React.FC = () => {
-  const { status, setUserRole, setStaffMember, setActiveDepartment } = useGlobalStatus();
+  const { status, setUserRole, setStaffMember, setActiveDepartment, setCommandCoreMember } = useGlobalStatus();
   const [hasEnteredCommand, setHasEnteredCommand] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showDepartmentHub, setShowDepartmentHub] = useState(false);
   const [chefIndex] = useState(() => Math.floor(Math.random() * 5));
 
   const handleLogin = (role: UserRole, staffMember?: { id: string; name: string; permissions: string[] }) => {
     setIsTransitioning(true);
     setTimeout(() => {
       setUserRole(role);
-      if (staffMember) {
-        setStaffMember(staffMember.id, staffMember.name, staffMember.permissions);
+
+      // Clear any previous role data
+      if (role === 'master') {
+        // Clear staff/department data when logging in as master
+        setActiveDepartment(null);
+        setStaffMember(null as any, null as any, []); // Clear staff member data
+        if (staffMember) {
+          setCommandCoreMember(staffMember.id, staffMember.name, staffMember.permissions);
+        }
+      } else if (role === 'staff') {
+        // Clear any department when switching to staff
+        setActiveDepartment(null);
+        // Set staff member when logging in as staff
+        if (staffMember) {
+          setStaffMember(staffMember.id, staffMember.name, staffMember.permissions);
+        }
+      } else {
+        // For servant role, clear both staff and command core data
+        setActiveDepartment(null);
+        setStaffMember(null as any, null as any, []); // Clear staff member data
       }
+
       setIsTransitioning(false);
       soundService.playTransition();
     }, 2800);
@@ -85,26 +106,46 @@ const AppContent: React.FC = () => {
 
   const handleDepartmentSelect = (departmentId: string) => {
     setActiveDepartment(departmentId);
+    setShowDepartmentHub(false);
     setHasEnteredCommand(true);
   };
 
   if (isTransitioning) return <TransitionLoadingScreen />;
   if (!status.userRole) return <WelcomeScreen onLogin={handleLogin} />;
 
-  // Show Staff Portal first (with the globe)
-  if (!hasEnteredCommand) {
-    return <StaffPortal chefIndex={chefIndex} onEnterCommand={() => setHasEnteredCommand(true)} />;
+  // Show Staff Portal first (with the globe) - for ALL users
+  if (!hasEnteredCommand && !showDepartmentHub) {
+    return <StaffPortal chefIndex={chefIndex} onEnterCommand={() => {
+      // When entering command from Staff Portal
+      if (status.userRole === 'staff' && !status.activeDepartment) {
+        // Staff user with no department - show Department Hub
+        setShowDepartmentHub(true);
+      } else {
+        // Non-staff or staff with department - go straight to app
+        setHasEnteredCommand(true);
+      }
+    }} />;
   }
 
-  // Staff flow: if staff member is selected but no department, show DepartmentHub
-  if (status.userRole === 'staff' && status.staff.memberId && !status.activeDepartment) {
+  // ONLY show Department Hub when explicitly requested via the flag
+  if (showDepartmentHub && status.userRole === 'staff') {
     return <DepartmentHub onSelectDepartment={handleDepartmentSelect} />;
   }
 
   // Main application with Layout and Routes
   return (
     <HashRouter>
-      <Layout onReturnToPortal={() => setHasEnteredCommand(false)}>
+      <Layout
+        onReturnToPortal={() => {
+          setHasEnteredCommand(false);
+          setShowDepartmentHub(false);
+        }}
+        onChangeDepartment={() => {
+          setActiveDepartment(null);
+          setShowDepartmentHub(true);
+          setHasEnteredCommand(false);
+        }}
+      >
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/saint-graph" element={<SaintGraph />} />
@@ -117,6 +158,7 @@ const AppContent: React.FC = () => {
           <Route path="/anomalies" element={<Anomalies />} />
           <Route path="/hearthspace" element={<Hearthspace />} />
           <Route path="/sheba" element={<ShebaLens />} />
+          <Route path="/reactor" element={<ReactorControl />} />
         </Routes>
       </Layout>
     </HashRouter>
@@ -126,6 +168,28 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <StatusProvider>
+      <style>{`
+        /* Global custom scrollbar */
+        *::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        *::-webkit-scrollbar-track {
+          background: rgba(15, 23, 42, 0.5);
+          border-left: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        *::-webkit-scrollbar-thumb {
+          background: rgba(6, 182, 212, 0.3);
+          border-radius: 4px;
+        }
+        *::-webkit-scrollbar-thumb:hover {
+          background: rgba(6, 182, 212, 0.5);
+        }
+        * {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(6, 182, 212, 0.3) rgba(15, 23, 42, 0.5);
+        }
+      `}</style>
       <AppContent />
     </StatusProvider>
   );

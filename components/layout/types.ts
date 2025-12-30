@@ -3,6 +3,7 @@ import { UserRole } from '../../context/StatusContext.tsx';
 export interface LayoutProps {
   children: React.ReactNode;
   onReturnToPortal?: () => void;
+  onChangeDepartment?: () => void;
 }
 
 export interface ProfileStatProps {

@@ -1,9 +1,7 @@
 /**
  * CHALDEA ARCHIVAL DATA: BERSERKER CLASS IMAGE REGISTRY
- * Source: FGO Fandom Wiki (Stage 1 Redirects)
+ * Source: Local bundled images
  */
-
-const WIKI_BASE = "https://fategrandorder.fandom.com/wiki/Special:FilePath/";
 
 export const BERSERKER_IMAGES: Record<string, string> = {
   S047: `${WIKI_BASE}S047_Stage1.webp`, // Heracles
@@ -17,7 +15,7 @@ export const BERSERKER_IMAGES: Record<string, string> = {
   S055: `${WIKI_BASE}S055_Stage1.webp`, // Darius III
   S056: `${WIKI_BASE}S056_Stage1.webp`, // Kiyohime
   S057: `${WIKI_BASE}S057_Stage1.webp`, // Eric Bloodaxe
-  S059: `https://static.wikia.nocookie.net/fategrandorder/images/9/93/S058_Stage1.webp/revision/latest?cb=20220910122644`, // Tamamo Cat (Updated per user request)
+  S059: `/images/servants/.webp`, // Tamamo Cat (Updated per user request)
   S082: `${WIKI_BASE}S082_Stage1.webp`, // Frankenstein
   S105: `${WIKI_BASE}S105_Stage1.webp`, // Nightingale
   S110: `${WIKI_BASE}S110_Stage1.webp`, // Cú Chulainn (Alter)

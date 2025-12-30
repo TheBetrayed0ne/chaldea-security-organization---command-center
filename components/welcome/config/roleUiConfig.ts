@@ -3,8 +3,8 @@ import { RoleConfig } from '../types.ts';
 
 export const ROLE_UI_CONFIG: Record<UserRole, RoleConfig> = {
   master: {
-    title: "Master",
-    designation: "Candidate 48 // Human Order Anchor",
+    title: "Command Core",
+    designation: "Central Authority // Human Order Oversight",
     color: "border-cyan-500 text-cyan-400 shadow-cyan-900/20",
     icon: "◈"
   },

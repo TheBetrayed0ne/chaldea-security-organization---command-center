@@ -6,7 +6,7 @@ const EMIYA: Servant = {
   name: 'EMIYA',
   class: 'Archer',
   rarity: 4,
-  image: 'https://static.wikia.nocookie.net/fategrandorder/images/d/d9/S011_Stage1.webp/revision/latest?cb=20220910075638',
+  image: '/images/servants/S011.webp',
   description: 'A walking contradiction wrapped in red cloth and black steel. White hair, sharp eyes. Built for war and rebuilt for penance.',
   stats: { atk: 9398, hp: 11521, str: 'D', end: 'C', agi: 'C', man: 'B', lck: 'E', np: 'A' },
   noblePhantasm: { name: 'Unlimited Blade Works', rank: 'A', type: 'Anti-Unit' },

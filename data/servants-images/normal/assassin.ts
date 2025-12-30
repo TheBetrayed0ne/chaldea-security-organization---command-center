@@ -1,10 +1,8 @@
 
 /**
  * CHALDEA ARCHIVAL DATA: ASSASSIN CLASS IMAGE REGISTRY
- * Source: FGO Fandom Wiki (Stage 1 Redirects)
+ * Source: Local bundled images
  */
-
-const WIKI_BASE = "https://fategrandorder.fandom.com/wiki/Special:FilePath/";
 
 export const ASSASSIN_IMAGES: Record<string, string> = {
   S039: `${WIKI_BASE}S039_Stage1.webp`, // Sasaki Kojirō

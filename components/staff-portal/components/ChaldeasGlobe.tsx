@@ -27,7 +27,7 @@ export const ChaldeasGlobe: React.FC<ChaldeasGlobeProps> = ({ mousePos, atmosphe
       >
         {/* Parallax Layer 1: Deep Stars */}
         <div 
-          className="absolute inset-[-20%] opacity-40 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] transition-transform duration-700 ease-out pointer-events-none"
+          className="absolute inset-[-20%] opacity-40 bg-[url('/images/textures/stardust.png')] transition-transform duration-700 ease-out pointer-events-none"
           style={{ 
             transform: `translate(${mousePos.x * 6}px, ${mousePos.y * 6}px) scale(1.3)`,
           }}

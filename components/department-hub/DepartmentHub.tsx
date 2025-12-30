@@ -38,6 +38,34 @@ const DEPARTMENTS: Department[] = [
     description: 'Internal messaging, ChaldExNet, and external liaison',
     icon: '📡',
     color: 'blue'
+  },
+  {
+    id: 'security',
+    name: 'Security',
+    description: 'Facility protection, containment protocols, and threat surveillance',
+    icon: '🛡️',
+    color: 'red'
+  },
+  {
+    id: 'engineering',
+    name: 'Engineering',
+    description: 'Technical systems, spiritron framework, and diagnostics',
+    icon: '⚙️',
+    color: 'violet'
+  },
+  {
+    id: 'maintenance',
+    name: 'Maintenance',
+    description: 'Infrastructure repairs, facility upkeep, and equipment servicing',
+    icon: '🔧',
+    color: 'orange'
+  },
+  {
+    id: 'janitorial',
+    name: 'Janitorial',
+    description: 'Sanitation services, supply management, and environmental maintenance',
+    icon: '🧹',
+    color: 'lime'
   }
 ];
 
@@ -60,7 +88,7 @@ const DepartmentHub: React.FC<DepartmentHubProps> = ({ onSelectDepartment }) => 
       <div className="w-full max-w-6xl">
         <header className="text-center mb-12">
           <h1 className="text-3xl font-black text-slate-100 tracking-[0.3em] uppercase mb-4">
-            Department Hub
+            Department Control
           </h1>
           <p className="text-sm text-cyan-500 tracking-[0.2em] uppercase font-mono mb-2">
             Staff Member: {status.staff.memberName || 'Unknown'}

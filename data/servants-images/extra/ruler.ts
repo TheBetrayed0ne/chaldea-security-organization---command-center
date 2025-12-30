@@ -1,10 +1,8 @@
 
 /**
  * CHALDEA ARCHIVAL DATA: RULER CLASS IMAGE REGISTRY
- * Source: FGO Fandom Wiki (Stage 1 Redirects)
+ * Source: Local bundled images
  */
-
-const WIKI_BASE = "https://fategrandorder.fandom.com/wiki/Special:FilePath/";
 
 export const RULER_IMAGES: Record<string, string> = {
   S016: `${WIKI_BASE}S016_Stage1.webp`, // Jeanne d'Arc

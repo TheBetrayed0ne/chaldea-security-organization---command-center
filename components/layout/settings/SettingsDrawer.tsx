@@ -149,30 +149,6 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ isOpen, onToggle
           </CollapsibleSection>
 
           <CollapsibleSection 
-            title="Leyline Metrics" 
-            id="leyline" 
-            isOpen={!!openSections.leyline} 
-            onToggle={toggleSection}
-          >
-            <div className="space-y-4">
-              <div>
-                <p className="text-[9px] text-slate-600 uppercase mb-2 font-bold">Temporal Window</p>
-                <div className="flex flex-wrap gap-1">
-                  {['1h', '6h', '24h', '72h'].map(r => (
-                    <button 
-                      key={r} 
-                      onClick={() => handleSettingChange('chartRange', r as any)} 
-                      className={`flex-1 py-1.5 border text-[9px] rounded transition-all font-bold ${status.settings.chartRange === r ? 'bg-slate-700 text-cyan-400 border-cyan-500/50' : 'text-slate-600 border-slate-800 hover:border-slate-700'}`}
-                    >
-                      {r.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </CollapsibleSection>
-
-          <CollapsibleSection 
             title="Operational Focus" 
             id="role" 
             isOpen={!!openSections.role} 
@@ -192,23 +168,41 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ isOpen, onToggle
             </div>
           </CollapsibleSection>
 
-          <CollapsibleSection 
-            title="Accessibility" 
-            id="access" 
-            isOpen={!!openSections.access} 
+          <CollapsibleSection
+            title="Accessibility"
+            id="access"
+            isOpen={!!openSections.access}
             onToggle={toggleSection}
           >
             <div className="space-y-4">
-              <SettingToggle 
-                label="High Contrast" 
-                active={status.settings.accessibility.highContrast} 
-                onClick={() => handleSettingChange('accessibility', { ...status.settings.accessibility, highContrast: !status.settings.accessibility.highContrast })} 
+              <SettingToggle
+                label="High Contrast"
+                active={status.settings.accessibility.highContrast}
+                onClick={() => handleSettingChange('accessibility', { ...status.settings.accessibility, highContrast: !status.settings.accessibility.highContrast })}
               />
-              <SettingToggle 
-                label="Reduce Motion" 
-                active={status.settings.accessibility.reduceMotion} 
-                onClick={() => handleSettingChange('accessibility', { ...status.settings.accessibility, reduceMotion: !status.settings.accessibility.reduceMotion })} 
+              <SettingToggle
+                label="Reduce Motion"
+                active={status.settings.accessibility.reduceMotion}
+                onClick={() => handleSettingChange('accessibility', { ...status.settings.accessibility, reduceMotion: !status.settings.accessibility.reduceMotion })}
               />
+            </div>
+          </CollapsibleSection>
+
+          <CollapsibleSection
+            title="Display Behavior"
+            id="display"
+            isOpen={!!openSections.display}
+            onToggle={toggleSection}
+          >
+            <div className="space-y-4">
+              <SettingToggle
+                label="Allow Small Window Growth"
+                active={status.settings.display.allowSmallWindowGrowth}
+                onClick={() => handleSettingChange('display', { ...status.settings.display, allowSmallWindowGrowth: !status.settings.display.allowSmallWindowGrowth })}
+              />
+              <p className="text-[8px] text-slate-600 uppercase leading-relaxed italic">
+                When enabled, small UI windows will scale with browser zoom. When disabled (default), they maintain fixed sizes.
+              </p>
             </div>
           </CollapsibleSection>
         </div>
