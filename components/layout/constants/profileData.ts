@@ -11,7 +11,7 @@ export const PROFILE_DATA: Record<UserRole, any> = {
     shortName: "R. Fujimaru",
     id: "STAFF_8392",
     designation: "48th Candidate // LAST MASTER",
-    avatar: 'https://static.wikia.nocookie.net/fategrandorder/images/4/49/FujimaruRitsuka_Portrait_Female.webp/revision/latest?cb=20231219055143',
+    avatar: '/images/avatars/master-female.webp',
     clearance: "Level_EX",
     syncStatus: "OPTIMAL",
     stats: [

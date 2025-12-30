@@ -83,7 +83,7 @@ const Layout: React.FC<LayoutProps> = ({ children, onReturnToPortal }) => {
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded bg-slate-50 dark:bg-slate-950 flex items-center justify-center border border-slate-200 dark:border-cyan-500/20 overflow-hidden shadow-sm dark:shadow-[0_0_20px_rgba(34,211,238,0.15)] group transition-all hover:border-cyan-500/40">
               <img 
-                src="https://ih1.redbubble.net/image.1540769570.5309/flat,750x,075,f-pad,750x1000,f8f8f8.u2.webp" 
+                src="/images/ui/chaldea-logo.webp" 
                 alt="Chaldea Symbol" 
                 className="w-full h-full object-contain scale-110 drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]"
               />
