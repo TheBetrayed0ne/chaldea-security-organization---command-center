@@ -1,0 +1,8 @@
+{
+  "name": "Chaldea Security Organization - Command Center",
+  "description": "A high-tech terminal for Chaldea staff to manage Saint Graphs, monitor Singularities, and interface with SHEBA.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
