@@ -1,0 +1,34 @@
+✓ Skipped data\servants\normal\saber.ts - no changes needed
+
+✓ Skipped data\servants\normal\archer.ts - no changes needed
+
+✓ Skipped data\servants\normal\lancer.ts - no changes needed
+
+✓ Skipped data\servants\normal\rider.ts - no changes needed
+
+✓ Skipped data\servants\normal\caster.ts - no changes needed
+
+✓ Skipped data\servants\normal\assassin.ts - no changes needed
+
+✓ Skipped data\servants\normal\berserker.ts - no changes needed
+
+✓ Skipped data\servants\extra\ruler.ts - no changes needed
+
+✓ Skipped data\servants\extra\avenger.ts - no changes needed
+
+✓ Skipped data\servants\extra\moon-cancer.ts - no changes needed
+
+✓ Skipped data\servants\extra\alter-ego.ts - no changes needed
+
+✓ Skipped data\servants\extra\foreigner.ts - no changes needed
+
+✓ Skipped data\servants\extra\pretender.ts - no changes needed
+
+✓ Skipped data\servants\extra\beast.ts - no changes needed
+
+✓ Skipped data\servants\extra\shielder.ts - no changes needed
+
+All servant image paths updated to use names!
+
+NOTE: You will need to rename your actual image files in public/images/servants/
+to match the new naming convention (e.g., S001.webp -> S-Artoria_Pendragon.webp)

@@ -29,7 +29,8 @@ export const DEPARTMENT_NAV: DepartmentNavMap = {
         { label: 'Anomalies', route: '/anomalies', icon: '▵' }
       ],
       communications: [
-        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' }
+        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' },
+        { label: 'VoidTube', route: '/void-tube', icon: '▶' }
       ],
       departmental: [
         { label: 'Logistics', route: '/logistics', icon: '▤' },
@@ -61,7 +62,8 @@ export const DEPARTMENT_NAV: DepartmentNavMap = {
         { label: 'Anomalies', route: '/anomalies', icon: '▵' }
       ],
       communications: [
-        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' }
+        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' },
+        { label: 'VoidTube', route: '/void-tube', icon: '▶' }
       ],
       departmental: [
         { label: 'Logistics', route: '/logistics', icon: '▤' },
@@ -94,7 +96,8 @@ export const DEPARTMENT_NAV: DepartmentNavMap = {
         { label: 'Sheba Lens', route: '/sheba', icon: '🔭' }
       ],
       communications: [
-        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' }
+        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' },
+        { label: 'VoidTube', route: '/void-tube', icon: '▶' }
       ],
       departmental: [
         { label: 'Logistics', route: '/logistics', icon: '▤' }
@@ -109,7 +112,8 @@ export const DEPARTMENT_NAV: DepartmentNavMap = {
         { label: 'Anomalies', route: '/anomalies', icon: '▵' }
       ],
       communications: [
-        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' }
+        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' },
+        { label: 'VoidTube', route: '/void-tube', icon: '▶' }
       ],
       departmental: [
         { label: 'Logistics', route: '/logistics', icon: '▤' },
@@ -125,7 +129,8 @@ export const DEPARTMENT_NAV: DepartmentNavMap = {
         { label: 'Anomalies', route: '/anomalies', icon: '▵' }
       ],
       communications: [
-        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' }
+        { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' },
+        { label: 'VoidTube', route: '/void-tube', icon: '▶' }
       ],
       departmental: [
         { label: 'Singularities', route: '/singularities', icon: '🌍' }
@@ -160,6 +165,7 @@ export const DEFAULT_NAV: DepartmentNavConfig = {
   ],
   communications: [
     { label: 'ChaldExNet', route: '/chaldexnet', icon: '▣' },
+    { label: 'VoidTube', route: '/void-tube', icon: '▶' },
     { label: 'Hearthspace', route: '/hearthspace', icon: '🏠' }
   ],
   departmental: [

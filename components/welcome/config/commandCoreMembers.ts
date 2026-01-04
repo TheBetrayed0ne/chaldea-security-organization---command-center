@@ -65,7 +65,7 @@ export const COMMAND_CORE_MEMBERS: CommandCoreMember[] = [
     title: 'Shielding Demi-Servant',
     role: 'Security // Field Operations',
     permissions: ['security', 'field-ops', 'defensive-protocols', 'servant-liaison'],
-    avatar: '/images/servants/S001.webp',
+    avatar: '/images/servants/SH-001.webp',
     description: 'Demi-Servant fused with the spirit of Galahad. Primary defensive specialist and Master\'s partner in all Rayshift operations. Unwavering loyalty and tactical expertise in protecting humanity\'s last hope.'
   }
 ];

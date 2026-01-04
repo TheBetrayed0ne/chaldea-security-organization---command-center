@@ -3,7 +3,14 @@
     "allow": [
       "Bash(npm run build:*)",
       "Bash(node -e:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(node add-images.cjs:*)",
+      "Bash(rm:*)",
+      "Bash(node fix-all-images.cjs:*)",
+      "Bash(git checkout:*)",
+      "Bash(node update-image-names.cjs:*)",
+      "Bash(node fix-servant-images.cjs:*)",
+      "Bash(node:*)"
     ]
   }
 }

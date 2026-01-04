@@ -16,6 +16,7 @@ import Anomalies from './components/Anomalies.tsx';
 import Hearthspace from './components/Hearthspace.tsx';
 import ShebaLens from './components/ShebaLens.tsx';
 import ReactorControl from './components/ReactorControl/index.ts';
+import VoidTube from './components/void-tube/index.ts';
 import { StatusProvider, useGlobalStatus, UserRole } from './context/StatusContext.tsx';
 import { soundService } from './services/soundService.ts';
 
@@ -151,6 +152,7 @@ const AppContent: React.FC = () => {
           <Route path="/saint-graph" element={<SaintGraph />} />
           <Route path="/rayshift" element={<Rayshift />} />
           <Route path="/chaldexnet" element={<ChaldExNet />} />
+          <Route path="/void-tube" element={<VoidTube />} />
           <Route path="/logistics" element={<Logistics />} />
           <Route path="/medical" element={<PersonnelRecords />} />
           <Route path="/hr" element={<HRDepartment />} />
